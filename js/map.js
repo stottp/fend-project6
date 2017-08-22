@@ -1,4 +1,4 @@
-//var markers = [];
+var markers = [];
 
 var init = function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -25,6 +25,27 @@ var geocode = function geocodeAddress(geocoder, resultsMap) {
       lng = (results[0].geometry.location.lng());
       console.log(lat, lng);
       getcrimes(lat, lng, 2017-01);
+
+      var locationsarray = [
+          {location: {lat: 52.440460, lng: -2.122233}},
+          {location: {lat: 52.423930, lng: -2.127922}},
+          {location: {lat: 52.429010, lng: -2.126967}},
+          {location: {lat: 52.432283, lng: -2.108370}},
+          {location: {lat: 52.423935, lng: -2.131408}}
+      ]
+
+      for (var i = 0; i < locationsarray.length; i++) {
+          var position = locationsarray[i].location;
+
+          marker = new google.maps.Marker({
+              setMap: map,
+              position: position,
+              id: i
+          });
+          markers.push(marker);
+      }
+      var markerCluster = new MarkerClusterer(map, markers);
+
       //var markers = new google.maps.Marker({
         //map: resultsMap,
         //position: results[0].geometry.location
