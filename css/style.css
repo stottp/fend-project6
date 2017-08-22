@@ -1,0 +1,54 @@
+/* Mobile first design */
+
+html, body {
+	height: 100%;
+	width: 100%;
+
+	/* display: flex;
+	flex-wrap: wrap; */
+}
+
+.form-outer li {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	flex: 1 0 120px;
+	max-width: 420px;
+}
+
+.form-outer label {
+	flex: 1 0 220px;
+}
+
+/* form design */
+input {
+	width: 80%;
+	box-sizing: border-box;
+	padding: 12px 20px;
+
+}
+
+#locationBtn {
+	width: 24%;
+}
+
+
+/* map style */
+
+#map {
+	height:100%;
+	width: 90%;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+
+@media screen and (min-width: 480px) {
+    body {
+        background-color: blue;
+    }
+
+	input {
+		width: 50%;
+	}
+}
