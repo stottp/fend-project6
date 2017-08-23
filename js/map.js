@@ -1,3 +1,9 @@
+//to do
+
+//1. create a view model
+//2. Add markers
+//3. link ajax response to dom via view model
+
 var markers = [];
 
 var init = function initMap() {
