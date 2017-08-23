@@ -57,6 +57,8 @@ var geocode = function geocodeAddress(geocoder, resultsMap) {
 
       var markerCluster = new MarkerClusterer(resultsMap, markers);
 
+      //get the address name to populate last 5 searches
+
       //var markers = new google.maps.Marker({
         //map: resultsMap,
         //position: results[0].geometry.location
