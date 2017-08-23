@@ -37,14 +37,19 @@ var geocode = function geocodeAddress(geocoder, resultsMap) {
       for (var i = 0; i < locationsarray.length; i++) {
           var position = locationsarray[i].location;
 
-          marker = new google.maps.Marker({
-              setMap: map,
+          var marker = new google.maps.Marker({
+              map: resultsMap,
               position: position,
               id: i
           });
           markers.push(marker);
+          console.log(markers);
       }
-      var markerCluster = new MarkerClusterer(map, markers);
+
+      // To add the marker to the map, call setMap();
+      marker.setMap(resultsMap);
+
+      var markerCluster = new MarkerClusterer(resultsMap, markers);
 
       //var markers = new google.maps.Marker({
         //map: resultsMap,
