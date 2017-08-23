@@ -37,15 +37,15 @@ var Crime = function(data) {
     this.location = ko.observable(data.location);
     this.street = ko.observable(data.street);
     this.month = ko.observable(data.month);
-
-    //keep track of the last 5 searches
-    this.last5Searches = ko.observableArray();
 }
 
 var AppViewModel = function() {
     var self = this;
 
-    //current crmes
+    //get search location
+    this.locationName = ko.observable();
+
+    //current crimes
     this.crimeList = ko.observableArray([]);
 
     initialCrimes.forEach(function(crimeItem) {
@@ -56,6 +56,9 @@ var AppViewModel = function() {
     //create new instance of crimeData
     this.currentCrime = ko.observable( this.crimeList() );
 
+    //keep track of the last 5 searches
+    this.last5Searches = ko.observableArray();
+
     this.arrayInformation = function() {
         alert('The length of the array is ' + this.crimeList().length);
         alert('The first element is ' + this.crimeList()[0].category());
@@ -63,9 +66,9 @@ var AppViewModel = function() {
 
     //call ajax query
     this.getCrimes = function() {
-            self.crimeList.push( new Crime(getcrimesforlocation(52.4199, -2.14521, 2017-01)));
-        };
-
+            this.last5Searches.push(this.locationName());
+            console.log(this.last5Searches());
+        }, this;
 
 
     this.viewCrime = function(clickedCrime) {

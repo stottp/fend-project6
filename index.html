@@ -13,7 +13,7 @@
       <h1>Search a location to view</h1>
       <form id="form-container" class="form-container">
           <label for="location">Location:
-              <input type="text" id="location" value="" placeholder="Enter a location">
+              <input type="text" id="location" value="" placeholder="Enter a location" data-bind="value: locationName" >
           </label>
           <button type="button" form="form-container" id="search-btn">Search!</button>
       </form>
@@ -23,9 +23,15 @@
               <li data-bind="text: category, click: $parent.viewCrime"></li>
           </ul>
 
+          <!-- only visible if user has searched for a location -->
+          <p data-bind="visible: last5Searches().length > 0">
+              last 5 searches:
+              <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>
+          </p>
+
           <button data-bind="click: arrayInformation">Array Information</button>
 
-          <button data-bind="click: getCrimes">Get Crime Information</button>
+          <button data-bind="click: getCrimes">Add to last 5 searches</button>
       </div>
 
 
