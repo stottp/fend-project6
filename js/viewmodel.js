@@ -1,4 +1,4 @@
-var getcrimes = function getCrimesData(lat, lng, date) {
+var getcrimesforlocation = function getCrimesData(lat, lng, date) {
     var crimeUrlTest = 'https://data.police.uk/api/crimes-street/all-crime?lat=52.4199&lng=-2.14521&date=2017-01';
     var crimeUrl = 'https://data.police.uk/api/crimes-street/all-crime?lat=' + lat + '&lng=' + lng + '&date=2017-01';
     var lat = lat;
@@ -9,10 +9,14 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     $.getJSON(crimeUrl, function (data) {
         console.log(data);
         crimes = data;
+
         for (var i = 0; i < crimes.length; i++) {
             var crime = crimes[i];
             console.log(crime);
+            this.crimeList.push( new Crime(crime) );
         }
+
+        return crimes
     })
 }
 
@@ -57,8 +61,12 @@ var AppViewModel = function() {
         alert('The first element is ' + this.crimeList()[0].category());
     };
 
+    //call ajax query
+    this.getCrimes = function() {
+            self.crimeList.push( new Crime(getcrimesforlocation(52.4199, -2.14521, 2017-01)));
+        };
 
-    
+
 
     this.viewCrime = function(clickedCrime) {
             alert(clickedCrime);

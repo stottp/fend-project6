@@ -18,22 +18,14 @@
           <button type="button" form="form-container" id="search-btn">Search!</button>
       </form>
 
-      <div id="knockout-example data-bind="with:currentCrime"">
+      <div id="knockout-example data-bind="with:Crime"">
           <ul data-bind="foreach: crimeList">
               <li data-bind="text: category, click: $parent.viewCrime"></li>
           </ul>
 
-          <p>
-              Category:
-              <select data-bind="options: crimeList"></select>
-          </p>
-
-          <p>
-              Multiple Select:
-              <select data-bind="options: crimeList" size="5" multiple="true"></select>
-          </p>
-
           <button data-bind="click: arrayInformation">Array Information</button>
+
+          <button data-bind="click: getCrimes">Get Crime Information</button>
       </div>
 
 
