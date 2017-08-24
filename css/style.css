@@ -2,12 +2,89 @@
 
 html, body {
 	height: 100%;
-	width: 100%;
 	margin: 0;
 	padding: 0;
+}
 
-	/* display: flex;
-	flex-wrap: wrap; */
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
+.title {
+	font-size: 2.5em;
+	text-align: center;
+}
+
+.box {
+	min-height: 150px;
+	width: 100%;
+}
+
+.dark_blue {
+	background-color: #2A457A;
+	color: #efefef;
+}
+
+.light_blue {
+	background-color: #099DD9;
+}
+
+.green {
+	background-color: #0C8542;
+}
+
+.left {
+	min-height: 150px;
+	width: 100%;
+}
+
+.right {
+	height: 100%;
+	width: 100%;
+}
+
+
+/* These are the responsive breakpoins */
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	height: 100%;
+}
+
+
+/* media screen queries */
+
+@media screen and (min-width: 450px) {
+	.dark_blue {
+		width: 25%;
+	}
+	.light_blue {
+		width: 75%;
+	}
+}
+
+
+@media screen and (min-width: 650px) {
+	.left {
+		width: 40%;
+	}
+	.right {
+		width: 60%;
+		height: 100%;
+	}
+}
+
+/* map style */
+
+#map {
+	width: 100%;
+	height: 100%;
+	min-height: 150px;
+}
+
+
+/* Old CSS that might need changing */
 }
 
 .form-outer li {
@@ -35,14 +112,6 @@ input {
 }
 
 
-/* map style */
-
-#map {
-	height:100%;
-	width: 100%;
-	display: flex;
-	flex-wrap: wrap;
-}
 
 
 #overlay {
@@ -69,15 +138,4 @@ input[type=text] {
 
 input[type=text]:focus {
     width: 60%;
-}
-
-
-@media screen and (min-width: 480px) {
-    body {
-        background-color: blue;
-    }
-
-	input {
-		width: 50%;
-	}
 }

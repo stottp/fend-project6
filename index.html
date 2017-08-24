@@ -11,34 +11,55 @@
       <link rel="stylesheet" href="css/style.css" type="text/css">
   </head>
   <body>
+      <div class="container">
+          <div class="left">
+              <h1>Search a location to view</h1>
+              <form id="form-container" class="form-container">
+                  <label for="location">Location:
+                      <input type="text" id="location" value="" placeholder="Enter a location" data-bind="value: locationName" >
+                  </label>
+                  <button type="button" form="form-container" id="search-btn">Search!</button>
+              </form>
 
-      <h1>Search a location to view</h1>
-      <form id="form-container" class="form-container">
-          <label for="location">Location:
-              <input type="text" id="location" value="" placeholder="Enter a location" data-bind="value: locationName" >
-          </label>
-          <button type="button" form="form-container" id="search-btn">Search!</button>
-      </form>
+              <p data-bind="visible: last5Searches().length > 0">
+                  last 5 searches:
+                  <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>
+              </p>
 
-      <div id="knockout-example data-bind="with:Crime"">
-          <ul data-bind="foreach: crimeList">
-              <li data-bind="text: category, click: $parent.viewCrime"></li>
-          </ul>
+              <button data-bind="click: lastFive">Add to last 5 searches</button>
+              <button data-bind="click: getCrimes">Get Crimes</button>
+              <button data-bind="click: addMarkers">Add Markers</button>
 
-          <!-- only visible if user has searched for a location -->
-          <p data-bind="visible: last5Searches().length > 0">
-              last 5 searches:
-              <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>
-          </p>
+              <div id="knockout-example data-bind="with:Crime"">
+                  <!--
+                  <ul data-bind="foreach: crimeList">
+                      <li data-bind="text: category, click: $parent.viewCrime"></li>
+                  </ul> -->
 
-          <button data-bind="click: arrayInformation">Array Information</button>
+                  <!-- only visible if user has searched for a location -->
 
-          <button data-bind="click: getCrimes">Add to last 5 searches</button>
+              </div> <!-- knockout div -->
 
-          <button data-bind="click: getCrimes2">Get Crimes</button>
+              <p>
+                  Choose a category:
+                  <select data-bind="options: crimeResults,
+                            optionsText: 'category',
+                            value: selectedCategory,
+                            optionsCaption: 'Choose...'">
+                </select>
+            </p>
 
-          <button data-bind="click: addMarkers">Add Markers</button>
-      </div>
+            <p>
+              <ul data-bind="foreach: crimeResults">
+                  <li data-bind="text: category"></li>
+              </ul>
+
+          </div> <!-- left div -->
+
+          <div class="right">
+                <div id="map"></div>
+          </div> <!-- right div -->
+      </div> <!-- container div -->
 
       <p>Lat: <strong data-bind="text: lat"></strong></p>
       <p>Lng: <strong data-bind="text: lng"></strong></p>
@@ -51,7 +72,7 @@
       </div> -->
 
 
-       <div id="map"></div>
+
 
        <i class="material-icons">home</i>
 
