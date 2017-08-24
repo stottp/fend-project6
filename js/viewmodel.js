@@ -85,6 +85,16 @@ var AppViewModel = function() {
     //this.selectedCategory = ko.observableArray(this.crimeResultsCategories()[0]);
     //this.selectedCategory = ko.observableArray(this.crimeResultsCategories())
 
+    this.uniqueCategories = ko.pureComputed(function() {
+        var unique = [];
+        for (var i = 0; i < this.crimeResults.length; i++) {
+            if (unique.indexOf(this.crimeResults[i]) == -1)
+            unique.push(this.crimeResults[i].category)
+        }
+        return unique;
+        console.log(unique)
+    }, this);
+
     this.selectedCategory = ko.observable();
 
     //get search location

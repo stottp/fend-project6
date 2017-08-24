@@ -2,6 +2,7 @@
 
 html, body {
 	height: 100%;
+	width: 100%;
 	margin: 0;
 	padding: 0;
 }
@@ -11,13 +12,8 @@ body {
 }
 
 .title {
-	font-size: 2.5em;
+	font-size: 1.9em;
 	text-align: center;
-}
-
-.box {
-	min-height: 150px;
-	width: 100%;
 }
 
 .dark_blue {
@@ -29,75 +25,85 @@ body {
 	background-color: #099DD9;
 }
 
-.green {
-	background-color: #0C8542;
-}
-
-.left {
-	min-height: 150px;
-	width: 100%;
-}
-
-.right {
-	height: 100%;
-	width: 100%;
-}
-
-
-/* These are the responsive breakpoins */
-
-.container {
-	display: flex;
-	flex-wrap: wrap;
-	height: 100%;
-}
-
-
-/* media screen queries */
-
-@media screen and (min-width: 450px) {
-	.dark_blue {
-		width: 25%;
-	}
-	.light_blue {
-		width: 75%;
-	}
-}
-
-
-@media screen and (min-width: 650px) {
-	.left {
-		width: 40%;
-	}
-	.right {
-		width: 60%;
-		height: 100%;
-	}
-}
-
 /* map style */
 
 #map {
 	width: 100%;
 	height: 100%;
-	min-height: 150px;
+
+}
+
+
+
+/*** burger menu ***/
+
+a#menu svg {
+	width: 40px;
+	fill: #000;
+}
+
+nav, main {
+	box-sizing: border-box;
+}
+
+main {
+	width: 100%;
+	height: 100%;
+}
+
+nav {
+	padding: 1em;
+	width: 35%;
+	height: 100%;
+	min-width: 300px;
+	position: absolute;
+	/* This trasform moves the drawer off canvas. */
+	-webkit-transform: translate(-300px, 0);
+	transform: translate(-300px, 0);
+	/* Animate the drawer. */
+	transition: transform 0.3s ease;
+	z-index: 99;
+}
+
+nav.open {
+	-webkit-transform: translate(0, 0);
+	transform: translate(0, 0);
+}
+
+
+/* If there is (> 600px) the menu is always open. */
+@media screen and (min-width: 600px) {
+	/* Remove the menu. */
+	#menu {
+		display: none;
+	}
+
+	/* Open the drawer. */
+	nav {
+		position:relative;
+		-webkit-transform: translate(0, 0);
+		transform: translate(0, 0);
+	}
+
+	/* Flexbox on the parent. */
+	body {
+		display: -webkit-flex;
+		display: flex;
+		-webkit-flex-flow: row nowrap;
+		flex-flow: row nowrap;
+	}
+
+	main {
+		width: auto;
+		/* Streches the main content to fill all available space. */
+		flex-grow: 1;
+	}
 }
 
 
 /* Old CSS that might need changing */
-}
 
-.form-outer li {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	flex: 1 0 120px;
-	max-width: 420px;
-}
 
-.form-outer label {
-	flex: 1 0 220px;
-}
 
 /* form design */
 input {
@@ -105,20 +111,6 @@ input {
 	box-sizing: border-box;
 	padding: 12px 20px;
 
-}
-
-#locationBtn {
-	width: 24%;
-}
-
-
-
-
-#overlay {
-	position: absolute;
-	top: 10px;
-	left: 100px;
-	z-index: 99;
 }
 
 input[type=text] {

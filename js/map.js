@@ -5,13 +5,31 @@
 //3. Set error handlind on api call
 //4. Declare 1 map instance and update it from everywhere
 //5. Set markers in loop or wait until loop has finished
-//6. Change colours of markers depending on category of crime
-//7. Have a month and date selector
+//6. Change colours of markers depending on category
+//7. Have a month and date selector to choose
 //8. Make the app responsive
+//9. Add geocode location for initial rendering and fall back to Stourbridge if not
+//10 Get the filter to work and how it impacts the markers shown
+//11. What is the list view?
+//12. Click a marker displays unique information about it, maybe update DOM
+//13. Animate markers when clicked
+//14. Ensure 5 locations are used
+//15. Update README to show where the api is being used
+//16. Update README to include all the steps to get the application to run
+//17. Add comments to code
+//18. Check code on style guide and run it through lint et al
+//19. Last 5 seached dropdown, on click reperforms the search, maybe need to store lat lng in it too
+//20. Advanced - On map move, redraw the markers
+
 
 var markers = [];
 
 var init = function initMap() {
+    var menu = document.querySelector('#menu');
+    var main = document.querySelector('main');
+    var drawer = document.querySelector('#drawer');
+
+
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
         center: {lat: 52.397, lng: -2.43},
@@ -34,6 +52,16 @@ var init = function initMap() {
         document.getElementById('search-btn').addEventListener('click', function() {
             geocode(map);
         });
+
+        // add event listener for menu
+        menu.addEventListener('click', function(e) {
+        drawer.classList.toggle('open');
+        e.stopPropagation();
+        });
+
+        main.addEventListener('click', function() {
+        drawer.classList.remove('open');
+      });
     }
 
 // use google Geocode to get the address of a searched location
