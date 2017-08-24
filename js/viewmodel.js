@@ -27,6 +27,9 @@ var updatemarkers = function updateCrimeMarkers() {
         zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
     });
     var bounds = new google.maps.LatLngBounds();
+
+    var largeInfoWindow = new google.maps.InfoWindow();
+
     for (var i = 0; i < appViewModel.crimeResults().length; i++) {
         var crimeCategory = appViewModel.crimeResults()[i].category;
         var crimePosition = appViewModel.crimeResults()[i].location;
@@ -47,6 +50,12 @@ var updatemarkers = function updateCrimeMarkers() {
 
         // Add the crime locations to the map
         markers.push(marker);
+
+        //create an onclick event to open an info window on marker
+        marker.addListener('click', function() {
+            poplateinfowindow(this, largeInfoWindow);
+            makemarkerbounce(this)
+        })
 
         // Extend the boundries of the map for each marker
         bounds.extend(marker.position);
@@ -108,6 +117,13 @@ var AppViewModel = function() {
             this.last5Searches.push(this.locationName());
             console.log(this.last5Searches());
         };
+
+    //this would call all of the functions one after another to produce the list
+    this.knockoutSearch = function() {
+        geocode();
+        getcrimes(lat, lng, 2017-03);
+        this.lastFive();
+    }
 
     this.getCrimes = function() {
         getcrimes(lat, lng, 2017-03);
