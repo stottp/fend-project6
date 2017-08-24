@@ -3,6 +3,8 @@
 html, body {
 	height: 100%;
 	width: 100%;
+	margin: 0;
+	padding: 0;
 
 	/* display: flex;
 	flex-wrap: wrap; */
@@ -36,10 +38,37 @@ input {
 /* map style */
 
 #map {
-	height:80%;
-	width: 80%;
+	height:100%;
+	width: 100%;
 	display: flex;
 	flex-wrap: wrap;
+}
+
+
+#overlay {
+	position: absolute;
+	top: 10px;
+	left: 100px;
+	z-index: 99;
+}
+
+input[type=text] {
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('/img/searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+    width: 60%;
 }
 
 

@@ -1,6 +1,5 @@
 //to do
 
-//1. create a view model
 //2. Add markers
 //3. link ajax response to dom via view model
 
@@ -9,13 +8,23 @@ var markers = [];
 var init = function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
-        center: {lat: 52.397, lng: -2.43}
+        center: {lat: 52.397, lng: -2.43},
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_RIGHT
+          },
+          scrollwheel: false,
+          zoomControl: false,
+          //zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_BOTTOM}
+          zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
     });
   var geocoder = new google.maps.Geocoder();
 
   var locationAutocomplete = new google.maps.places.Autocomplete(
       document.getElementById('location'));
 
+// remove this and bind it to knockout
   document.getElementById('search-btn').addEventListener('click', function() {
       geocode(geocoder, map);
   });
@@ -29,15 +38,22 @@ var geocode = function geocodeAddress(geocoder, resultsMap) {
       resultsMap.setCenter(results[0].geometry.location);
       lat = (results[0].geometry.location.lat());
       lng = (results[0].geometry.location.lng());
+
+
+      //put the lat lng in an observable
+      appViewModel.lat = lat;
+      appViewModel.lng = lng;
       console.log(lat, lng);
-      getcrimes(lat, lng, 2017-01);
+
+      var locationsarraytest = [getcrimesold(lat, lng, 2017-01)];
+      console.log(locationsarray);
 
       var locationsarray = [
           {location: {lat: 52.440460, lng: -2.122233}},
           {location: {lat: 52.423930, lng: -2.127922}},
-          {location: {lat: 52.429010, lng: -2.126967}},
+         {location: {lat: 52.429010, lng: -2.126967}},
           {location: {lat: 52.432283, lng: -2.108370}},
-          {location: {lat: 52.423935, lng: -2.131408}}
+         {location: {lat: 52.423935, lng: -2.131408}}
       ]
 
       for (var i = 0; i < locationsarray.length; i++) {
@@ -69,7 +85,7 @@ var geocode = function geocodeAddress(geocoder, resultsMap) {
   });
 }
 
-var getcrimes = function getCrimesData(lat, lng, date) {
+var getcrimesold = function getCrimesDataold(lat, lng, date) {
     var crimeUrlTest = 'https://data.police.uk/api/crimes-street/all-crime?lat=52.4199&lng=-2.14521&date=2017-01';
     var crimeUrl = 'https://data.police.uk/api/crimes-street/all-crime?lat=' + lat + '&lng=' + lng + '&date=2017-01';
     var lat = lat;
@@ -79,10 +95,7 @@ var getcrimes = function getCrimesData(lat, lng, date) {
 
     $.getJSON(crimeUrl, function (data) {
         console.log(data);
+        appViewModel.crimeResults(data);
         crimes = data;
-        for (var i = 0; i < crimes.length; i++) {
-            var crime = crimes[i];
-            console.log(crime);
-        }
     })
 }
