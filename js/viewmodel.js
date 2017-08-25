@@ -68,7 +68,7 @@ var updatemarkers = function updateCrimeMarkers() {
 };
 
 // Class to represent the crime data model
-var Crime = function(data) {
+var Crime2 = function(data) {
     //declare with this or var?
     this.category = ko.observable(data.category);
     this.id = ko.observable(data.id);
@@ -77,12 +77,21 @@ var Crime = function(data) {
     this.month = ko.observable(data.month);
 }
 
+
+var Crime = function() {
+    this.category = ko.observable('A crime');
+    this.location = ko.observable('A location');
+}
+
 var AppViewModel = function() {
     var self = this;
 
     //get lat lng in ko observable
     this.lat = ko.observable();
     this.lng = ko.observable();
+
+    // current crime that has been clicked
+    this.currentCrime = ko.observable( new Crime() );
 
     // Never push to the array to get a new list when a new location is searched
     this.crimeResults = ko.observableArray();

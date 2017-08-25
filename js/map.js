@@ -21,7 +21,7 @@
 //20. Advanced - On map move, redraw the markers
 //21. On mobile capturing press enter
 //22. Remove the event listener and bind it to ko
-//23. Only select one toggle bounce
+//23. Set map to be 100% on screen below hamburger menu on mobile
 
 
 // does this need to be a ko.observableArray?
@@ -47,6 +47,36 @@ var init = function initMap() {
           zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
     });
 
+    infoWindow = new google.maps.InfoWindow;
+
+    // Try HTML5 geolocation.
+        /*if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Location found.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+      } */
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+
     // Utilise google maps Autocomplete functionality on search
     var locationAutocomplete = new google.maps.places.Autocomplete(
         document.getElementById('location'));
@@ -56,9 +86,25 @@ var init = function initMap() {
             geocode(map);
         });
 
+
+        // Prevent enter submitting the form but run the same function as hitting search
+        document.getElementById("form-container").onkeypress = function(e) {
+            var key = e.charCode || e.keyCode || 0;
+            if (key == 13) {
+                e.preventDefault();
+                console.log('Enter has been pressed');
+                geocode(map);
+            }
+        }
+
         // add event listener for menu
         menu.addEventListener('click', function(e) {
         drawer.classList.toggle('open');
+        e.stopPropagation();
+        });
+
+        document.getElementById('menu-close').addEventListener('click', function(e) {
+        drawer.classList.remove('open');
         e.stopPropagation();
         });
 
