@@ -19,9 +19,9 @@
 //18. Check code on style guide and run it through lint et al
 //19. Last 5 seached dropdown, on click reperforms the search, maybe need to store lat lng in it too
 //20. Advanced - On map move, redraw the markers
-//21. On mobile capturing press enter
 //22. Remove the event listener and bind it to ko
 //23. Set map to be 100% on screen below hamburger menu on mobile
+//24. run updatemarkers() after init has run through callback or promises
 
 
 // does this need to be a ko.observableArray?
@@ -35,7 +35,7 @@ var init = function initMap() {
 
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
-        center: {lat: 52.397, lng: -2.43},
+        center: {lat: 52.678419, lng: -2.445257999999967},
         mapTypeControl: true,
         mapTypeControlOptions: {
             style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -48,6 +48,8 @@ var init = function initMap() {
     });
 
     infoWindow = new google.maps.InfoWindow;
+
+
 
     // Try HTML5 geolocation.
         /*if (navigator.geolocation) {
@@ -87,7 +89,7 @@ var init = function initMap() {
         });
 
 
-        // Prevent enter submitting the form but run the same function as hitting search
+        // Capture enter key and run the geocode map function
         document.getElementById("form-container").onkeypress = function(e) {
             var key = e.charCode || e.keyCode || 0;
             if (key == 13) {
@@ -111,6 +113,15 @@ var init = function initMap() {
         main.addEventListener('click', function() {
         drawer.classList.remove('open');
       });
+
+
+      appViewModel.lat = 52.678419;
+      appViewModel.lng = -2.445257999999967;
+
+      getcrimes(appViewModel.lat, appViewModel.lng , 2017-03);
+
+      //Run updatemarkers after init has run?
+      //updatemarkers;
     }
 
 // use google Geocode to get the address of a searched location

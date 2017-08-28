@@ -8,7 +8,7 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     $.getJSON(crimeUrl, function (data) {
         //add the results to an observableArray
         appViewModel.crimeResults(data);
-        console.log(appViewModel.crimeResults());
+        //console.log(appViewModel.crimeResults());
     });
 };
 
