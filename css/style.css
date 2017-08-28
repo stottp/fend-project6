@@ -147,10 +147,9 @@ input[type=text] {
 
 label {
 	flex-basis: 100%;
-	padding-bottom: 1.2em;
-
-
+	padding-bottom: 0.6em;
 }
+
 
 #form-container {
 	padding-bottom: 2em;
@@ -161,12 +160,21 @@ label {
 	justify-content: center;
 }
 
-
 #search-btn {
 	flex-basis: 100%;
 	justify-content: center;
+	background-color: #457A2A; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+
 }
 
-#search-btn {
-
+#search-btn:hover {
+    background-color: #30541D; /* Green */
+    color: white;
 }
