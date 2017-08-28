@@ -8,8 +8,12 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     $.getJSON(crimeUrl, function (data) {
         //add the results to an observableArray
         appViewModel.crimeResults(data);
-        //console.log(appViewModel.crimeResults());
     });
+
+    // add to the observable array
+    appViewModel.crimeResults().forEach(function(crimeItem) {
+        appViewModel.crimeList.push(new Crime2(crimeItem));
+    })
 };
 
 // create all the new markers for the crimes from the api call
@@ -90,11 +94,20 @@ var AppViewModel = function() {
     this.lat = ko.observable();
     this.lng = ko.observable();
 
-    // current crime that has been clicked
-    this.currentCrime = ko.observable( new Crime() );
-
     // Never push to the array to get a new list when a new location is searched
     this.crimeResults = ko.observableArray();
+
+    // Store crimes in an observableArray
+    this.crimeList = ko.observableArray([]);
+
+    // current crime that has been clicked
+    this.currentCrime = ko.observable( this.crimeList()[0] );
+
+    this.setCrime = function(clickedCrime2) {
+        self.currentCrime(clickedCrime2);
+    }
+
+
 
     // Create an array of the types of crimes, possibly with the number of occurances?
     this.crimeResultsCategories = ko.observableArray([{category: "None"}, {category: "anti-social-behaviour"}, {category: "burglary"}]);

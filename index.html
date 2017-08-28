@@ -49,6 +49,30 @@
             </select>
         </p>
 
+        <div data-bind="with: currentCrime">
+            <h4 data-bind="text: category"></h4>
+            <h4 data-bind="text: id"></h4>
+            <div data-bind="foreach: location">
+                <li <span data-bind="text: $data"></span>/li>
+            </div>
+            <h4 data-bind="text: location().street"></h4>
+        </div>
+
+        <h3> Current Crime </h3>
+        <p>
+            <ul data-bind="foreach: crimeList">
+                <li data-bind="text: category, click: $parent.setCrime"></li>
+            </ul>
+        </p>
+
+        <h3> Crime List </h3>
+        <p>
+            <ul data-bind="foreach: crimeList">
+                <li data-bind="text: category, click: $parent.setCrime"></li>
+            </ul>
+        </p>
+
+        <h3> Crime Results </h3>
         <p>
             <ul data-bind="foreach: crimeResults">
                 <li data-bind="text: category"></li>

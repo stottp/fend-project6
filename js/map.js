@@ -21,7 +21,7 @@
 //20. Advanced - On map move, redraw the markers
 //22. Remove the event listener and bind it to ko
 //23. Set map to be 100% on screen below hamburger menu on mobile
-//24. run updatemarkers() after init has run through callback or promises
+//24. run updatemarkers() after init has run through callback or promises - can you run promises or call back on variables
 
 
 // does this need to be a ko.observableArray?
@@ -122,7 +122,7 @@ var init = function initMap() {
 
       //Run updatemarkers after init has run?
       //updatemarkers;
-    }
+  };
 
 // use google Geocode to get the address of a searched location
 var geocode = function geocodeAddress() {
