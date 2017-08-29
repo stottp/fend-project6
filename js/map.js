@@ -22,7 +22,7 @@ var init = function initMap() {
           zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
     });
 
-    infoWindow = new google.maps.InfoWindow;
+     var infoWindow = new google.maps.InfoWindow();
 
 
 
