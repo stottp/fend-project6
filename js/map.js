@@ -1,23 +1,3 @@
-//to do
-
-//4. Declare 1 map instance and update it from everywhere
-//5. Set markers in loop or wait until loop has finished
-//6. Change colours of markers depending on category
-//7. Have a month and date selector to choose
-//8. Enhance the UX and UI
-//9. Add geocode location for initial rendering and fall back to Stourbridge if not
-//10 Get the filter to work and how it impacts the markers shown
-//11. What is the list view?
-//12. Click a marker displays unique information about it, maybe update DOM using ko
-//15. Update README to show where the api is being used
-//16. Update README to include all the steps to get the application to run
-//17. Add comments to code
-//18. Check code on style guide and run it through lint et al
-//19. Last 5 seached dropdown, on click reperforms the search, maybe need to store lat lng in it too
-//20. Advanced - On map move, redraw the markers
-//23. Set map to be 100% on screen below hamburger menu on mobile
-
-
 // does this need to be a ko.observableArray?
 var markers = [];
 
@@ -92,7 +72,7 @@ var init = function initMap() {
                 console.log('Enter has been pressed');
                 geocode(map);
             }
-        }
+        };
 
         // add event listener for menu
         menu.addEventListener('click', function(e) {
@@ -156,7 +136,7 @@ var geocode = function geocodeAddress() {
       window.alert('Geocode was not successful for the following reason: ' + status);
     }
   });
-}
+};
 
 var poplateinfowindow = function populateInfoWindow(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
@@ -169,7 +149,7 @@ var poplateinfowindow = function populateInfoWindow(marker, infowindow) {
             infowindow.marker = null;
           });
         }
-      }
+      };
 
 // adds a 5 second bounce animation to markers when they are clicked
 var makemarkerbounce = function makeMarkerBounce(marker) {
@@ -178,8 +158,8 @@ var makemarkerbounce = function makeMarkerBounce(marker) {
         } else {
             marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() {
-                marker.setAnimation(null)
+                marker.setAnimation(null);
             }, 5000);
         }
-        alert('I have clicked on marker' + marker.title)
-    }
+        alert('I have clicked on marker' + marker.title);
+    };

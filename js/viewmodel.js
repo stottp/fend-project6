@@ -15,7 +15,7 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     })
     .always(function() {
         if(appViewModel.crimeResults().length > 0) {
-            updatemarkers()
+            updatemarkers();
             appViewModel.lastFive();
         } else {
             alert('Sorry that location did not return a list of crimes');
@@ -29,8 +29,8 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     // add to the observable array
     appViewModel.crimeResults().forEach(function(crimeItem) {
         appViewModel.crimeList.push(new Crime2(crimeItem));
-    })
-}
+    });
+};
 
 // creates all the new markers for the crimes from the api call and drop them on the map
 var updatemarkers = function updateCrimeMarkers() {
@@ -53,7 +53,7 @@ var updatemarkers = function updateCrimeMarkers() {
 
     for (var i = 0; i < appViewModel.crimeList().length; i++) {
         console.log(appViewModel.crimeList()[i].location);
-    };
+    }
 
     for (var i = 0; i < appViewModel.crimeResults().length; i++) {
         var crimeCategory = appViewModel.crimeResults()[i].category;
@@ -82,8 +82,8 @@ var updatemarkers = function updateCrimeMarkers() {
         //create an onclick event to open an info window on marker
         marker.addListener('click', function() {
             poplateinfowindow(this, largeInfoWindow);
-            makemarkerbounce(this)
-        })
+            makemarkerbounce(this);
+        });
 
         // Extend the boundries of the map for each marker
         bounds.extend(marker.position);
@@ -103,13 +103,13 @@ var Crime2 = function(data) {
     this.location = ko.observable(data.location);
     this.street = ko.observable(data.street);
     this.month = ko.observable(data.month);
-}
+};
 
 
 var Crime = function() {
     this.category = ko.observable('A crime');
     this.location = ko.observable('A location');
-}
+};
 
 var AppViewModel = function() {
     var self = this;
@@ -131,7 +131,7 @@ var AppViewModel = function() {
     // Sets the current crime
     this.setCrime = function(clickedCrime2) {
         self.currentCrime(clickedCrime2);
-    }
+    };
 
     // Stores markers in array
     this.crimeMarkers = ko.observableArray();
@@ -158,19 +158,6 @@ var AppViewModel = function() {
     // Create an array of the types of crimes, possibly with the number of occurances?
     this.crimeResultsCategories = ko.observableArray([{category: "None"}, {category: "anti-social-behaviour"}, {category: "burglary"}]);
 
-    // Create an array of the types of crimes, possibly with the number of occurances?
-    //this.selectedCategory = ko.observableArray(this.crimeResultsCategories()[0]);
-    //this.selectedCategory = ko.observableArray(this.crimeResultsCategories())
-
-    this.uniqueCategories = ko.pureComputed(function() {
-        var unique = [];
-        for (var i = 0; i < this.crimeResults.length; i++) {
-            if (unique.indexOf(this.crimeResults[i]) == -1)
-            unique.push(this.crimeResults[i].category)
-        }
-        return unique;
-        console.log(unique)
-    }, this);
 
     this.selectedCategory = ko.observable();
 
@@ -196,7 +183,7 @@ var AppViewModel = function() {
     this.knockoutSearch = function() {
         geocode();
     };
-}
+};
 
 
 // turn on deferred updates
