@@ -6,9 +6,9 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     var date = 2017-06;
 
     $.getJSON(crimeUrl, function (data) {
-        //add the results to an observableArray and call updatemarkers through a promise
+        //add the results to an observableArray and call updatemarkers and lastFive through a promise
         appViewModel.crimeResults(data);
-    }).then(updatemarkers);
+    }).then(updatemarkers).then(appViewModel.lastFive());
 
     // add to the observable array
     appViewModel.crimeResults().forEach(function(crimeItem) {
@@ -16,10 +16,11 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     })
 };
 
-// create all the new markers for the crimes from the api call
+// creates all the new markers for the crimes from the api call and drop them on the map
 var updatemarkers = function updateCrimeMarkers() {
 
     //var updateMap = init.map;
+    var updateMap2 = appViewModel.map;
     var updateMap = new google.maps.Map(document.getElementById('map'), {
         mapTypeControl: true,
         mapTypeControlOptions: {
@@ -108,6 +109,23 @@ var AppViewModel = function() {
     }
 
 
+    this.map = function() {
+        new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        //center: {lat: 52.678419, lng: -2.445257999999967},
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_RIGHT
+          },
+          scrollwheel: false,
+          zoomControl: true,
+          //zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_BOTTOM}
+          zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
+    });
+};
+
+
 
     // Create an array of the types of crimes, possibly with the number of occurances?
     this.crimeResultsCategories = ko.observableArray([{category: "None"}, {category: "anti-social-behaviour"}, {category: "burglary"}]);
@@ -134,8 +152,10 @@ var AppViewModel = function() {
     //keep track of the last 5 searches
     this.last5Searches = ko.observableArray();
 
-    //add last 5 locations
+    //add last 5 locations to drop dropdown
     this.lastFive = function() {
+        // check to see if a location has been searched for
+        if(self.locationName())
             this.last5Searches.push(this.locationName());
             console.log(this.last5Searches());
         };
