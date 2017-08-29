@@ -32,6 +32,19 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     });
 };
 
+// Test function to bind the markers together - http://jsfiddle.net/t9wcC/
+function point(name, lat, long) {
+    this.name = name;
+    this.lat = ko.observable(lat);
+    this.long = ko.observable(long);
+
+    var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(lat, long),
+        title: name,
+        map: map,
+        draggable: true
+    });
+
 // creates all the new markers for the crimes from the api call and drop them on the map
 var updatemarkers = function updateCrimeMarkers() {
 

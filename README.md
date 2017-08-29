@@ -8,7 +8,7 @@ Open this link https://stottp.github.io/fend-project6/index.html. The page defau
 
 ## Using the App
 
-Details of using the app will go here
+Search for a location in England and Wales and then you will see a map of all the crimes committed. By clicking on a map icon it shows the type of crime. 
 
 ### Prerequisites
 
