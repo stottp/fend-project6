@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>UK Crime Statistics by Location</title>
     <meta name="description" content="Project Neighbourhood">
-    <!-- <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
-      <link rel="stylesheet" href="//fonts.googleapis.com/css?family=font1|font2|etc" type="text/css"> -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/normalise.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -26,17 +23,13 @@
             <label for="location">
                 <input type="text" id="location" value="" placeholder="Enter a location" data-bind="value: locationName" class="location-input">
             </label>
-            <button type="button" form="form-container" id="search-btn" class="seach-button">Search!</button>
+            <button type="button" form="form-container" id="search-btn" class="seach-button" data-bind="click: knockoutSearch">Search!</button>
         </form>
 
         <p data-bind="visible: last5Searches().length > 0">
             last 5 searches:
             <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>
         </p>
-
-        <button data-bind="click: getCrimes">Get Crimes</button>
-        <button data-bind="click: uniqueCategories">Unique</button>
-        <button data-bind="click: knockoutSearch">knockoutSearch</button>
 
         <p>
             Choose a category:

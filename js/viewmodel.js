@@ -8,13 +8,29 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     $.getJSON(crimeUrl, function (data) {
         //add the results to an observableArray and call updatemarkers and lastFive through a promise
         appViewModel.crimeResults(data);
-    }).then(updatemarkers).then(appViewModel.lastFive());
+    })
+    // Check if there was an error or success .done could also be used
+    .fail(function(e) {
+        alert('Sorry there was an error selecting the data, please try again');
+    })
+    .always(function() {
+        if(appViewModel.crimeResults().length > 0) {
+            updatemarkers()
+            appViewModel.lastFive();
+        } else {
+            alert('Sorry that location did not return a list of crimes');
+        }
+
+    });
+
+    //appViewModel.crimeResults(data);
+    //}).then(updatemarkers).then(appViewModel.lastFive());
 
     // add to the observable array
     appViewModel.crimeResults().forEach(function(crimeItem) {
         appViewModel.crimeList.push(new Crime2(crimeItem));
     })
-};
+}
 
 // creates all the new markers for the crimes from the api call and drop them on the map
 var updatemarkers = function updateCrimeMarkers() {
@@ -34,6 +50,10 @@ var updatemarkers = function updateCrimeMarkers() {
     var bounds = new google.maps.LatLngBounds();
 
     var largeInfoWindow = new google.maps.InfoWindow();
+
+    for (var i = 0; i < appViewModel.crimeList().length; i++) {
+        console.log(appViewModel.crimeList()[i].location);
+    };
 
     for (var i = 0; i < appViewModel.crimeResults().length; i++) {
         var crimeCategory = appViewModel.crimeResults()[i].category;
@@ -55,6 +75,9 @@ var updatemarkers = function updateCrimeMarkers() {
 
         // Add the crime locations to the map
         markers.push(marker);
+
+        //
+        //appViewModel.crimeMarkers.push(marker);
 
         //create an onclick event to open an info window on marker
         marker.addListener('click', function() {
@@ -104,9 +127,14 @@ var AppViewModel = function() {
     // current crime that has been clicked
     this.currentCrime = ko.observable( this.crimeList()[0] );
 
+
+    // Sets the current crime
     this.setCrime = function(clickedCrime2) {
         self.currentCrime(clickedCrime2);
     }
+
+    // Stores markers in array
+    this.crimeMarkers = ko.observableArray();
 
 
     this.map = function() {
@@ -156,26 +184,23 @@ var AppViewModel = function() {
     this.lastFive = function() {
         // check to see if a location has been searched for
         if(self.locationName())
+        // check to see if location already exists in array
+        if(self.last5Searches().indexOf(self.locationName()) === -1)
             this.last5Searches.push(this.locationName());
-            console.log(this.last5Searches());
+            // maximum of 5 locaations allowed in array
+            if(self.last5Searches().length > 5)
+                self.last5Searches().shift();
         };
 
-    //this would call all of the functions one after another to produce the list
+    // Searches for location and returns markers
     this.knockoutSearch = function() {
         geocode();
-        getcrimes(lat, lng, 2017-03);
-        this.lastFive();
-    }
-
-    this.getCrimes = function() {
-        getcrimes(lat, lng, 2017-03);
     };
-
-    this.addMarkers = function() {
-        updatemarkers();
-    };
-
 }
+
+
+// turn on deferred updates
+ko.options.deferUpdates = true;
 
 var appViewModel = new AppViewModel();
 

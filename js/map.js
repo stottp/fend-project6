@@ -1,8 +1,5 @@
 //to do
 
-//1. hook up search direct to ko button
-//2. use promises or call back to get results of api call
-//3. Set error handlind on api call
 //4. Declare 1 map instance and update it from everywhere
 //5. Set markers in loop or wait until loop has finished
 //6. Change colours of markers depending on category
@@ -12,20 +9,18 @@
 //10 Get the filter to work and how it impacts the markers shown
 //11. What is the list view?
 //12. Click a marker displays unique information about it, maybe update DOM using ko
-//14. Ensure 5 locations are used
 //15. Update README to show where the api is being used
 //16. Update README to include all the steps to get the application to run
 //17. Add comments to code
 //18. Check code on style guide and run it through lint et al
 //19. Last 5 seached dropdown, on click reperforms the search, maybe need to store lat lng in it too
 //20. Advanced - On map move, redraw the markers
-//22. Remove the event listener and bind it to ko
 //23. Set map to be 100% on screen below hamburger menu on mobile
-//24. run updatemarkers() after init has run through callback or promises - can you run promises or call back on variables
 
 
 // does this need to be a ko.observableArray?
 var markers = [];
+
 
 var init = function initMap() {
     var menu = document.querySelector('#menu');
@@ -84,9 +79,9 @@ var init = function initMap() {
         document.getElementById('location'));
 
         // remove this and bind it to knockout
-        document.getElementById('search-btn').addEventListener('click', function() {
-            geocode(map);
-        });
+    //    document.getElementById('search-btn').addEventListener('click', function() {
+    //        geocode(map);
+    //    });
 
 
         // Capture enter key and run the geocode map function
@@ -114,14 +109,10 @@ var init = function initMap() {
         drawer.classList.remove('open');
       });
 
-
       appViewModel.lat = 52.678419;
       appViewModel.lng = -2.445257999999967;
 
       getcrimes(appViewModel.lat, appViewModel.lng , 2017-03);
-
-      //Run updatemarkers after init has run?
-      //updatemarkers;
   };
 
 // use google Geocode to get the address of a searched location
@@ -146,7 +137,10 @@ var geocode = function geocodeAddress() {
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
+
             markers.length = 0;
+            appViewModel.crimeMarkers  = 0;
+
             resultsMap.setCenter(results[0].geometry.location);
             lat = (results[0].geometry.location.lat());
             lng = (results[0].geometry.location.lng());
@@ -154,9 +148,10 @@ var geocode = function geocodeAddress() {
             //put the lat lng in an observable
             appViewModel.lat = lat;
             appViewModel.lng = lng;
-            console.log(lat, lng);
-            console.log(resultsMap);
             //bounds.extend(resultsMap.setCenter(results[0].geometry.location));
+
+            getcrimes(lat, lng, 2017-03);
+
     } else {
       window.alert('Geocode was not successful for the following reason: ' + status);
     }
