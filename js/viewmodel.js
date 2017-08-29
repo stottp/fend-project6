@@ -6,9 +6,9 @@ var getcrimes = function getCrimesData(lat, lng, date) {
     var date = 2017-06;
 
     $.getJSON(crimeUrl, function (data) {
-        //add the results to an observableArray
+        //add the results to an observableArray and call updatemarkers through a promise
         appViewModel.crimeResults(data);
-    });
+    }).then(updatemarkers);
 
     // add to the observable array
     appViewModel.crimeResults().forEach(function(crimeItem) {
