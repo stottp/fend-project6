@@ -26,6 +26,9 @@
                     <button type="button" form="form-container" id="search-btn" class="seach-button" data-bind="click: knockoutSearch">Search!</button>
                 </form>
 
+
+                <input type="text" data-bind="addressAutocomplete: address, autocompleteOptions: { componentRestrictions: { country: 'UK' } }" />
+
                 <p data-bind="visible: last5Searches().length > 0">
                     last 5 searches:
                     <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>

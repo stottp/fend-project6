@@ -34,6 +34,7 @@ var init = function initMap() {
         document.getElementById('location'));
 
 
+
     //add the markers to the map
     for (var i = 0; i < viewmodel.crimes().length; i++) {
         var marker = new google.maps.Marker({
