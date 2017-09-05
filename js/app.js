@@ -375,6 +375,17 @@ var ViewModel = function() {
 
     };
 
+    // filter crime list
+    this.filteredCrimes = ko.computed(function() {
+        if (self.selectedCategory() === undefined) {
+            return self.crimes();
+        } else {
+            return ko.utils.arrayFilter(self.crimes(), function(crime) {
+                return crime.category() === self.selectedCategory();
+            });
+        }
+    });
+
     // filters the markers based on the selectedCategory - *** this is the function to filter the markers ***
     this.filterMarker = ko.computed(function() {
         if ((self.selectedCategory() !== undefined)) {
@@ -388,6 +399,7 @@ var ViewModel = function() {
    this.knockoutSearch = function() {
        geocode();
        self.lastFive();
+       self.selectedCategory(null);
    };
 };
 

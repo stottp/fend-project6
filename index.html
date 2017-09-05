@@ -26,9 +26,6 @@
                     <button type="button" form="form-container" id="search-btn" class="seach-button" data-bind="click: knockoutSearch">Search!</button>
                 </form>
 
-
-                <input type="text" data-bind="addressAutocomplete: address, autocompleteOptions: { componentRestrictions: { country: 'UK' } }" />
-
                 <p data-bind="visible: last5Searches().length > 0">
                     last 5 searches:
                     <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>
@@ -53,15 +50,15 @@
                     <p class="paddedp">Outcome: <span data-bind="text: outcome_status"></span></p>
                 </div>
 
-
                 <h3 class="small-title">List of Crimes</h3>
-                <ul data-bind="foreach: crimes">
-                    <li data-bind="click: $parent.currentCrimeClick, visible: $parent.selectedCategory() === category()">
+                <ul data-bind="foreach: filteredCrimes">
+                    <li data-bind="click: $parent.currentCrimeClick">
                         <p>Cateogry: <span data-bind="text: category"></span></p>
                         <p>ID: <span data-bind="text: crimeId"></span></p>
                         <p>Street: <span data-bind="text: street"></span></p>
                     </li>
                 </ul>
+
             </div>
 
     </nav>
