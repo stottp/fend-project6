@@ -386,3 +386,8 @@ var viewmodel = new ViewModel();
 
 // Activates knockout.js
 ko.applyBindings(viewmodel);
+
+// catch erorrs
+function mapError() {
+    alert("Google Maps failed to load... Please try again");
+}
