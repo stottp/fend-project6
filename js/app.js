@@ -1,6 +1,7 @@
 var map;
 var bounds;
 var markers = [];
+var i;
 
 
 /* Initial funciton called async on google map load. it creates and sets the map
@@ -32,6 +33,7 @@ var init = function initMap() {
     var locationAutocomplete = new google.maps.places.Autocomplete(
         document.getElementById('location'));
 
+
     //add the markers to the map
     for (var i = 0; i < viewmodel.crimes().length; i++) {
         var marker = new google.maps.Marker({
@@ -40,23 +42,15 @@ var init = function initMap() {
             title: viewmodel.crimes()[i].category() + viewmodel.crimes()[i].crimeId(),
             animation: google.maps.Animation.DROP
         });
-        // adds marker to crimes
-        viewmodel.crimes()[i].marker = marker;
-        markers.push(marker);
-        bounds.extend(marker.position);
 
         // adds functionality to markers
-    //    viewmodel.crimes()[i].marker.addListener('click', function() {
-    //        poplateinfowindow(this, largeInfoWindow);
-    //        makemarkerbounce(this);
-    //    });
+        addmarkerfunction(i);
+
+        viewmodel.crimes()[i].marker = marker;
+
+        markers.push(marker);
+        bounds.extend(marker.position);
     }
-
-    map.addListener(markers, 'click', function() {
-        poplateinfowindow(this, largeInfoWindow);
-        makemarkerbounce(this);
-    });
-
 
     // Capture enter key and run the geocode map function
         document.getElementById("form-container").onkeypress = function(e) {
@@ -86,9 +80,20 @@ var init = function initMap() {
 };
 
 
+// Add functionality to markers
+var addmarkerfunction = function addMarkerFunction(i) {
+    var largeInfoWindow = new google.maps.InfoWindow();
+    viewmodel.crimes()[i].marker.addListener('click', function() {
+        poplateinfowindow(this, largeInfoWindow);
+        makemarkerbounce(this);
+    });
+
+};
+
+
 /*
-use google Geocode to get the address of a searched location from the
-text box called location on the index.html page
+* use google Geocode to get the address of a searched location from the
+* text box called location on the index.html page
 */
 var geocode = function geocodeAddress() {
 
@@ -185,17 +190,15 @@ var updatemarkers = function updateCrimeMarkers() {
         // adds marker to crimes array
         viewmodel.crimes()[i].marker = marker;
 
+        // adds functionality to markers
+        addmarkerfunction(i);
+
         // Add the crime locations to the map
         markers.push(marker);
 
         // Extend the boundries of the map for each marker
         bounds.extend(marker.position);
     }
-
-    map.addListener(markers, 'click', function() {
-        poplateinfowindow(this, largeInfoWindow);
-        makemarkerbounce(this);
-    });
 
     // Add the markers to the map through setMap;
     map.fitBounds(bounds);
@@ -365,6 +368,11 @@ var ViewModel = function() {
 
     // Captures the selected category
     this.selectedCategory = ko.observable();
+
+    // Filter category as a function
+    this.selectedFilter = function() {
+
+    };
 
     // filters the markers based on the selectedCategory - *** this is the function to filter the markers ***
     this.filterMarker = ko.computed(function() {

@@ -52,7 +52,7 @@
 
 
                 <h3 class="small-title">List of Crimes</h3>
-                <ul data-bind="foreach: crimes, visible: crimes().length > 0">
+                <ul data-bind="foreach: crimes">
                     <li data-bind="click: $parent.currentCrimeClick, visible: $parent.selectedCategory() === category()">
                         <p>Cateogry: <span data-bind="text: category"></span></p>
                         <p>ID: <span data-bind="text: crimeId"></span></p>
