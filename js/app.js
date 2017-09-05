@@ -46,11 +46,17 @@ var init = function initMap() {
         bounds.extend(marker.position);
 
         // adds functionality to markers
-        viewmodel.crimes()[i].marker.addListener('click', function() {
-            poplateinfowindow(this, largeInfoWindow);
-            makemarkerbounce(this);
-        });
+    //    viewmodel.crimes()[i].marker.addListener('click', function() {
+    //        poplateinfowindow(this, largeInfoWindow);
+    //        makemarkerbounce(this);
+    //    });
     }
+
+    map.addListener(markers, 'click', function() {
+        poplateinfowindow(this, largeInfoWindow);
+        makemarkerbounce(this);
+    });
+
 
     // Capture enter key and run the geocode map function
         document.getElementById("form-container").onkeypress = function(e) {
@@ -139,7 +145,7 @@ var Crime = function(data) {
         this.outcome_status = ko.observable(data.outcome_status.category);
     } else {
         this.outcome_status = ko.observable();
-    };
+    }
 };
 
 var updatemarkers = function updateCrimeMarkers() {
@@ -179,25 +185,21 @@ var updatemarkers = function updateCrimeMarkers() {
         // adds marker to crimes array
         viewmodel.crimes()[i].marker = marker;
 
-
-
         // Add the crime locations to the map
         markers.push(marker);
-
-        // adds functionality to markers
-        viewmodel.crimes()[i].marker.addListener('click', function() {
-            poplateinfowindow(this, largeInfoWindow);
-            makemarkerbounce(this);
-        });
-
 
         // Extend the boundries of the map for each marker
         bounds.extend(marker.position);
     }
 
+    map.addListener(markers, 'click', function() {
+        poplateinfowindow(this, largeInfoWindow);
+        makemarkerbounce(this);
+    });
+
     // Add the markers to the map through setMap;
     map.fitBounds(bounds);
-    marker.setMap(map);
+    //marker.setMap(map);
 
 };
 
@@ -220,6 +222,7 @@ var makemarkerbounce = function makeMarkerBounce(marker) {
 var removecrimemarkers = function removeCrimeMarkers() {
 
     var bounds = new google.maps.LatLngBounds();
+    var largeInfoWindow = new google.maps.InfoWindow();
     var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
     mapTypeControl: true,
@@ -238,17 +241,15 @@ var removecrimemarkers = function removeCrimeMarkers() {
             markers[i].setMap(null);
         } else {
             // Extend the boundries of the map for each marker
-            //create an onclick event to open an info window on marker
-            markers[i].addListener('click', function() {
-                poplateinfowindow(this, largeInfoWindow);
-                makemarkerbounce(this);
-            });
-
             bounds.extend(markers[i].position);
             map.fitBounds(bounds);
             markers[i].setMap(map);
         }
     }
+    map.addListener(markers, 'click', function() {
+        poplateinfowindow(this, largeInfoWindow);
+        makemarkerbounce(this);
+    });
 };
 
 
@@ -301,12 +302,7 @@ var ViewModel = function() {
 
     // get a list of crimes from police api
     this.getcrimes = function getCrimesData(lat, lng, date) {
-        var lat = lat;
-        var lng = lng;
-        var date = 2017-06;
         var crimeUrl = 'https://data.police.uk/api/crimes-street/all-crime?lat=' + lat + '&lng=' + lng + '&date' + date;
-
-        console.log(crimeUrl);
 
         // create new instances of crimes and add them to the crimesarray
        $.getJSON(crimeUrl, function(allData) {
@@ -360,13 +356,12 @@ var ViewModel = function() {
             return item.locations;
         });
         return locations.sort();
-        console.log(locations);
     });
 
     // Get unique categories from justCategories function
     this.uniqueCategories = ko.dependentObservable(function() {
         return ko.utils.arrayGetDistinctValues(self.justCategories()).sort();
-    }),
+    });
 
     // Captures the selected category
     this.selectedCategory = ko.observable();
