@@ -17,49 +17,49 @@
             </svg>
         </a>
 
-        <h2 class="title">Search a location to view</h2>
-            <form id="form-container" class="form-container">
-                <label for="location">
-                    <input type="text" id="location" value="" placeholder="Enter a location" data-bind="value: locationName" class="location-input">
-                </label>
-                <button type="button" form="form-container" id="search-btn" class="seach-button" data-bind="click: knockoutSearch">Search!</button>
-            </form>
+        <div id="container">
+            <h2 class="title">Search a location to view</h2>
+                <form id="form-container" class="form-container">
+                    <label for="location">
+                        <input type="text" id="location" value="" placeholder="Enter a location" data-bind="value: locationName" class="location-input">
+                    </label>
+                    <button type="button" form="form-container" id="search-btn" class="seach-button" data-bind="click: knockoutSearch">Search!</button>
+                </form>
 
-            <p data-bind="visible: last5Searches().length > 0">
-                last 5 searches:
-                <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>
-            </p>
-
-
-            <p>
-        	   	Choose a category:
-        	    <select data-bind="options: uniqueCategories,
-                                    value: selectedCategory,
-                                    optionsCaption: 'Choose...'"></select>
-        	</p>
-
-
-
-            <div data-bind="with:currentCrime">
-                <h3 data-bind="text: category"></h3>
-                <h4 data-bind="text: crimeId"></h4>
-                <p data-bind="with: location"> Location:
-                    Latitude: <span data-bind="text: latitude"> </span>,
-                    Longitude: <span data-bind="text: longitude"> </span>
+                <p data-bind="visible: last5Searches().length > 0">
+                    last 5 searches:
+                    <select data-bind="options: last5Searches(), visible: last5Searches().length > 0"></select>
                 </p>
-            </div>
 
-            <ul data-bind="foreach: crimes, visible: crimes().length > 0">
-                <li data-bind="click: $parent.currentCrimeClick, visible: $parent.selectedCategory() === category()">
-                    <p>Cateogry: <strong data-bind="text: category"></strong></p>
-                    <p>ID: <strong data-bind="text: crimeId"></strong></p>
-                    <p>Location: <strong data-bind="text: $parent.latLng"></strong></p>
-                    <p data-bind="with: location"> Location:
-                        Latitude: <span data-bind="text: latitude"> </span>,
-                        Longitude: <span data-bind="text: longitude"> </span>
-                    </p>
-                </li>
-            </ul>
+
+                <p>
+            	   	Choose a category:
+            	    <select data-bind="options: uniqueCategories,
+                                        value: selectedCategory,
+                                        optionsCaption: 'Choose...'"></select>
+            	</p>
+        </div>
+
+
+            <div id="crimes">
+                <div id="currentcrime" data-bind="with:currentCrime">
+                    <h3 class="small-title">Selected Crime</h3>
+                    <p class="paddedp">Cateogry: <span data-bind="text: category"></span></p>
+                    <p class="paddedp">ID: <span data-bind="text: crimeId"></span></p>
+                    <p class="paddedp">Street: <span data-bind="text: street"></span></p>
+                    <p class="paddedp">Outcome: <span data-bind="text: outcome_status"></span></p>
+                </div>
+
+
+                <h3 class="small-title"><strong data-bind="text: listOfCrimes"></strong></h3>
+                <ul data-bind="foreach: crimes, visible: crimes().length > 0">
+                    <li data-bind="click: $parent.currentCrimeClick, visible: $parent.selectedCategory() === category()">
+                        <p>Cateogry: <span data-bind="text: category"></span></p>
+                        <p>ID: <span data-bind="text: crimeId"></span></p>
+                        <p>Street: <span data-bind="text: street"></span></p>
+                    </li>
+                </ul>
+            </div>
 
     </nav>
 

@@ -16,6 +16,12 @@ body {
 	text-align: center;
 }
 
+.small-title {
+	font-size: 1.2em;
+	text-align: center;
+	background-color: #2A457A;
+}
+
 .dark_blue {
 	background-color: #2A457A;
 	color: #efefef;
@@ -58,7 +64,6 @@ main {
 }
 
 nav {
-	padding: 1em;
 	width: 45%;
 	height: 100%;
 	position: absolute;
@@ -68,11 +73,9 @@ nav {
 	/* Animate the drawer. */
 	transition: transform 0.3s ease;
 	z-index: 99;
-}
+	overflow-y: scroll;
 
-/* nav:first-child {
-	padding: 0em;
-} */
+}
 
 nav.open {
 	-webkit-transform: translate(0, 0);
@@ -84,6 +87,15 @@ nav.open {
   fill: transparent;
   stroke-linecap: round;
   stroke-width: 5;
+}
+
+#container {
+	padding: 1em;
+
+}
+
+#crimes {
+	overflow-y: scroll;
 }
 
 /* If there is (> 600px) the menu is always open. */
@@ -100,8 +112,8 @@ nav.open {
 		transform: translate(0, 0);
 		width: 35%;
 		height: 100%;
-		min-width: 150px;
-
+		min-width: 250px;
+		overflow-y: scroll;
 	}
 
 	/* Flexbox on the parent. */
@@ -117,6 +129,11 @@ nav.open {
 		/* Streches the main content to fill all available space. */
 		flex-grow: 1;
 	}
+
+	#crimes {
+		overflow-y: scroll;
+	}
+
 }
 
 /* form design */
@@ -178,3 +195,42 @@ label {
     background-color: #30541D; /* Green */
     color: white;
 }
+
+
+/* list design to hold all of the filtered crimes */
+
+#currentcrime {
+	background-color: rgba(122, 75, 42, .9);
+}
+
+.paddedp {
+	padding: 3px 10px 5px 20px;
+}
+
+ul {
+   margin: 0;
+   padding: 0;
+   list-style-type: none;
+}
+
+ul li {
+   font-weight: bold;
+   margin: 0;
+   padding: 3px 10px 5px 20px;
+   border-top: 1px solid #ccc;
+   color: #ffffff;
+}
+
+li {
+	background-color: rgba(69, 42, 122, .25)
+}
+
+li:nth-child(odd) {
+	background-color: rgba(42, 122, 95, .25)
+}
+
+
+ul li:hover {
+   color: #000;
+   background-color: #ddd;
+ }

@@ -2,11 +2,6 @@ var map;
 var bounds;
 var markers = [];
 
-/*
-api call to UK police data to retrieve a json list of crimes for a sepcific location
-*/
-
-
 
 /* Initial funciton called async on google map load. it creates and sets the map
 and adds markers to the map for a default location, Telford in England
@@ -32,6 +27,10 @@ var init = function initMap() {
 });
     var bounds = new google.maps.LatLngBounds();
     var infoWindow = new google.maps.InfoWindow();
+
+    // Utilise google maps Autocomplete functionality on search
+    var locationAutocomplete = new google.maps.places.Autocomplete(
+        document.getElementById('location'));
 
     //add the markers to the map
     for (var i = 0; i < viewmodel.crimes().length; i++) {
@@ -60,6 +59,7 @@ var init = function initMap() {
                 e.preventDefault();
                 console.log('Enter has been pressed');
                 geocode(map);
+
             }
         };
 
@@ -120,6 +120,8 @@ var geocode = function geocodeAddress() {
 
             viewmodel.getcrimes(lat, lng, 2017-06);
 
+            viewmodel.last5Searches();
+
     } else {
       window.alert('Geocode was not successful for the following reason: ' + status);
     }
@@ -127,12 +129,17 @@ var geocode = function geocodeAddress() {
 };
 
 
-
 // set up crime
 var Crime = function(data) {
     this.category = ko.observable(data.category);
     this.crimeId = ko.observable(data.id);
     this.location = ko.observable(data.location);
+    this.street = ko.observable(data.location.street.name);
+    if (data.outcome_status !== null) {
+        this.outcome_status = ko.observable(data.outcome_status.category);
+    } else {
+        this.outcome_status = ko.observable();
+    };
 };
 
 var updatemarkers = function updateCrimeMarkers() {
@@ -151,7 +158,7 @@ var updatemarkers = function updateCrimeMarkers() {
 });
     var bounds = new google.maps.LatLngBounds();
     var largeInfoWindow = new google.maps.InfoWindow();
-    
+
     for (var i = 0; i < viewmodel.crimes().length; i++) {
         var crimeCategory = viewmodel.crimes()[i].category();
         var crimeID = viewmodel.crimes()[i].crimeId();
@@ -205,7 +212,6 @@ var makemarkerbounce = function makeMarkerBounce(marker) {
                 marker.setAnimation(null);
             }, 5000);
         }
-        alert('I have clicked on marker ' + marker.title);
     };
 
 
@@ -229,7 +235,6 @@ var removecrimemarkers = function removeCrimeMarkers() {
     // need to sort out the markers and the array
     for (var i = 0; i < markers.length; i++ ) {
         if (markers[i].title !== viewmodel.selectedCategory()) {
-            console.log('Category is:' + markers[i].title + ' Selected is:' + viewmodel.selectedCategory());
             markers[i].setMap(null);
         } else {
             // Extend the boundries of the map for each marker
@@ -272,11 +277,14 @@ var ViewModel = function() {
     // keep track of the current crime
     this.currentCrime = ko.observable();
 
-    //get search location
+    // get search location
     this.locationName = ko.observable();
 
-    //keep track of the last 5 searches
+    // keep track of the last 5 searches
     this.last5Searches = ko.observableArray();
+
+    // adds a header to the crimes list
+    this.listOfCrimes = ko.observable();
 
     //add last 5 locations to drop dropdown
     this.lastFive = function() {
@@ -298,9 +306,12 @@ var ViewModel = function() {
         var date = 2017-06;
         var crimeUrl = 'https://data.police.uk/api/crimes-street/all-crime?lat=' + lat + '&lng=' + lng + '&date' + date;
 
+        console.log(crimeUrl);
+
+        // create new instances of crimes and add them to the crimesarray
        $.getJSON(crimeUrl, function(allData) {
         var mappedCrime = $.map(allData, function(item) {
-            return new Crime(item)
+            return new Crime(item);
         });
         self.crimes(mappedCrime);
     })
@@ -316,7 +327,7 @@ var ViewModel = function() {
     // Load initial data from api
     $.getJSON("https://data.police.uk/api/crimes-street/all-crime?lat=52.678419&lng=-2.445257999999967&date=2017-03", function(allData) {
         var mappedCrime = $.map(allData, function(item) {
-            return new Crime(item)
+            return new Crime(item);
         });
         self.crimes(mappedCrime);
     })
@@ -331,15 +342,15 @@ var ViewModel = function() {
     // Update the current crime
     this.currentCrimeClick = function(clickedCrime) {
         self.currentCrime(clickedCrime);
-        console.log(clickedCrime.marker);
         makemarkerbounce(clickedCrime.marker);
+        self.listOfCrimes("List of crimes");
     };
 
     // Just extract the categories from data
     this.justCategories =ko.computed(function() {
         var categories = ko.utils.arrayMap(self.crimes(), function(item) {
             return item.category();
-        })
+        });
         return categories.sort();
     });
 
@@ -347,7 +358,7 @@ var ViewModel = function() {
     this.justLocations =ko.computed(function() {
         var locations = ko.utils.arrayMap(self.crimes(), function(item) {
             return item.locations;
-        })
+        });
         return locations.sort();
         console.log(locations);
     });
@@ -366,7 +377,7 @@ var ViewModel = function() {
             // filter the markers
             removecrimemarkers();
             }
-        return //add something here;
+        return; //add something here;
     });
 
     // Searches for location and returns markers
@@ -374,7 +385,7 @@ var ViewModel = function() {
        geocode();
        self.lastFive();
    };
-}
+};
 
 var viewmodel = new ViewModel();
 
