@@ -1,7 +1,8 @@
 var map;
 var bounds;
+var largeInfoWindow;
+var infoWindow;
 var markers = [];
-var i;
 
 
 /* Initial funciton called async on google map load. it creates and sets the map
@@ -13,10 +14,11 @@ var init = function initMap() {
     var main = document.querySelector('main');
     var drawer = document.querySelector('#drawer');
 
-
-    var map = new google.maps.Map(document.getElementById('map'), {
+    // create the map
+    bounds = new google.maps.LatLngBounds();
+    largeInfoWindow = new google.maps.InfoWindow();
+    map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
-    center: {lat: 52.678419, lng: -2.445257999999967},
     mapTypeControl: true,
     mapTypeControlOptions: {
         style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -26,14 +28,12 @@ var init = function initMap() {
       zoomControl: true,
       zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
 });
-    var bounds = new google.maps.LatLngBounds();
-    var infoWindow = new google.maps.InfoWindow();
+
+    infoWindow = new google.maps.InfoWindow();
 
     // Utilise google maps Autocomplete functionality on search
     var locationAutocomplete = new google.maps.places.Autocomplete(
         document.getElementById('location'));
-
-
 
     //add the markers to the map
     for (var i = 0; i < viewmodel.crimes().length; i++) {
@@ -78,12 +78,16 @@ var init = function initMap() {
         main.addEventListener('click', function() {
         drawer.classList.remove('open');
       });
+
+        // ensure map resizes on window resize
+        google.maps.event.addDomListener(window, 'resize', function() {
+          map.fitBounds(bounds); //
+      });
 };
 
 
 // Add functionality to markers
 var addmarkerfunction = function addMarkerFunction(i) {
-    var largeInfoWindow = new google.maps.InfoWindow();
     viewmodel.crimes()[i].marker.addListener('click', function() {
         poplateinfowindow(this, largeInfoWindow);
         makemarkerbounce(this);
@@ -92,46 +96,25 @@ var addmarkerfunction = function addMarkerFunction(i) {
 };
 
 
-/*
-* use google Geocode to get the address of a searched location from the
-* text box called location on the index.html page
-*/
 var geocode = function geocodeAddress() {
-
-    var resultsMap = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
-        center: {lat: 52.397, lng: -2.43},
-        mapTypeControl: true,
-        mapTypeControlOptions: {
-            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-            position: google.maps.ControlPosition.TOP_RIGHT
-          },
-          scrollwheel: false,
-          zoomControl: true,
-          //zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_BOTTOM}
-          zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
-    });
-
     // could potentially use ko value
     var address = document.getElementById('location').value;
-    var bounds = new google.maps.LatLngBounds();
     var geocoder = new google.maps.Geocoder();
+
+    //reset bounds of the map
+    bounds = new google.maps.LatLngBounds();
+
     geocoder.geocode({'address': address}, function(results, status) {
         if (status === 'OK') {
-
             markers.length = 0;
-            //viewmodel.crimes  = 0;
-
-            resultsMap.setCenter(results[0].geometry.location);
+            map.setCenter(results[0].geometry.location);
             lat = (results[0].geometry.location.lat());
             lng = (results[0].geometry.location.lng());
 
             //put the lat lng in an observable
             viewmodel.lat = lat;
             viewmodel.lng = lng;
-
             viewmodel.getcrimes(lat, lng, 2017-06);
-
             viewmodel.last5Searches();
 
     } else {
@@ -155,22 +138,6 @@ var Crime = function(data) {
 };
 
 var updatemarkers = function updateCrimeMarkers() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
-    // error handling check array size
-    center: {lat: Number(viewmodel.crimes()[0].location().latitude), lng: Number(viewmodel.crimes()[0].location().longitude)},
-    mapTypeControl: true,
-    mapTypeControlOptions: {
-        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-        position: google.maps.ControlPosition.TOP_RIGHT
-      },
-      scrollwheel: false,
-      zoomControl: true,
-      zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
-});
-    var bounds = new google.maps.LatLngBounds();
-    var largeInfoWindow = new google.maps.InfoWindow();
-
     for (var i = 0; i < viewmodel.crimes().length; i++) {
         var crimeCategory = viewmodel.crimes()[i].category();
         var crimeID = viewmodel.crimes()[i].crimeId();
@@ -221,27 +188,33 @@ var makemarkerbounce = function makeMarkerBounce(marker) {
     };
 
 
+// show all markers in the array
+var showallmarkers = function showAllMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            bounds.extend(markers[i].position);
+            map.fitBounds(bounds);
+            markers[i].setMap(map);
+      };
+    };
+
+
+// show all markers in the array
+var removeallmarkers = function removeAllMarkers() {
+    for (var i = 0; i < markers.length; i++) {
+        bounds.extend(markers[i].position);
+        map.fitBounds(bounds);
+        markers[i].setMap(null);
+        markers = [];
+      };
+    };
 
 // this removes crime markers based on the selected dropdown
 var removecrimemarkers = function removeCrimeMarkers() {
-
-    var bounds = new google.maps.LatLngBounds();
-    var largeInfoWindow = new google.maps.InfoWindow();
-    var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
-    mapTypeControl: true,
-    mapTypeControlOptions: {
-        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-        position: google.maps.ControlPosition.TOP_RIGHT
-      },
-      scrollwheel: false,
-      zoomControl: true,
-      zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
-});
-
     // need to sort out the markers and the array
     for (var i = 0; i < markers.length; i++ ) {
-        if (markers[i].title !== viewmodel.selectedCategory()) {
+        if (viewmodel.selectedCategory() === '') {
+            console.log('I am undefined and caught');
+        } else if (markers[i].title !== viewmodel.selectedCategory()) {
             markers[i].setMap(null);
         } else {
             // Extend the boundries of the map for each marker
@@ -250,10 +223,6 @@ var removecrimemarkers = function removeCrimeMarkers() {
             markers[i].setMap(map);
         }
     }
-    map.addListener(markers, 'click', function() {
-        poplateinfowindow(this, largeInfoWindow);
-        makemarkerbounce(this);
-    });
 };
 
 
@@ -343,6 +312,7 @@ var ViewModel = function() {
     this.currentCrimeClick = function(clickedCrime) {
         self.currentCrime(clickedCrime);
         makemarkerbounce(clickedCrime.marker);
+        poplateinfowindow(clickedCrime.marker, largeInfoWindow);
         self.listOfCrimes("List of crimes");
     };
 
@@ -375,28 +345,28 @@ var ViewModel = function() {
 
     };
 
-    // filter crime list
+    // checks if dropdown has been selected
+    this.shouldRunFunctons = ko.observable(true);
+
+    // filter crime list based on dropdown
     this.filteredCrimes = ko.computed(function() {
-        if (self.selectedCategory() === undefined) {
-            return self.crimes();
-        } else {
-            return ko.utils.arrayFilter(self.crimes(), function(crime) {
-                return crime.category() === self.selectedCategory();
-            });
+        if (self.shouldRunFunctons()) {
+            if (self.selectedCategory() === undefined) {
+                showallmarkers();
+                return self.crimes();
+            } else {
+                removecrimemarkers();
+                return ko.utils.arrayFilter(self.crimes(), function(crime) {
+                    return crime.category() === self.selectedCategory();
+                });
+            }
         }
     });
 
-    // filters the markers based on the selectedCategory - *** this is the function to filter the markers ***
-    this.filterMarker = ko.computed(function() {
-        if ((self.selectedCategory() !== undefined)) {
-            // filter the markers
-            removecrimemarkers();
-            }
-        return; //add something here;
-    });
 
     // Searches for location and returns markers
    this.knockoutSearch = function() {
+       removeallmarkers();
        geocode();
        self.lastFive();
        self.selectedCategory(null);
