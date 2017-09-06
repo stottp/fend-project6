@@ -1,3 +1,4 @@
+// define global variables
 var map;
 var bounds;
 var largeInfoWindow;
@@ -6,7 +7,7 @@ var markers = [];
 
 
 /* Initial funciton called async on google map load. it creates and sets the map
-and adds markers to the map for a default location, Telford in England
+* and adds markers to the map for a default location, Telford in England
 */
 var init = function initMap() {
     // declare the responisve menu variable
@@ -18,16 +19,18 @@ var init = function initMap() {
     bounds = new google.maps.LatLngBounds();
     largeInfoWindow = new google.maps.InfoWindow();
     map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
-    mapTypeControl: true,
-    mapTypeControlOptions: {
-        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-        position: google.maps.ControlPosition.TOP_RIGHT
-      },
-      scrollwheel: false,
-      zoomControl: true,
-      zoomControlOptions: {position: google.maps.ControlPosition.TOP_RIGHT}
-});
+        zoom: 15,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_RIGHT
+        },
+        scrollwheel: false,
+        zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.TOP_RIGHT
+        }
+    });
 
     infoWindow = new google.maps.InfoWindow();
 
@@ -47,42 +50,44 @@ var init = function initMap() {
         // adds functionality to markers
         addmarkerfunction(i);
 
+        // add marker to crimes
         viewmodel.crimes()[i].marker = marker;
 
+        // add markers and update bounds
         markers.push(marker);
         bounds.extend(marker.position);
     }
 
     // Capture enter key and run the geocode map function
-        document.getElementById("form-container").onkeypress = function(e) {
-            var key = e.charCode || e.keyCode || 0;
-            if (key == 13) {
-                e.preventDefault();
-                console.log('Enter has been pressed');
-                geocode(map);
+    document.getElementById("form-container").onkeypress = function(e) {
+        var key = e.charCode || e.keyCode || 0;
+        if (key == 13) {
+            e.preventDefault();
+            console.log('Enter has been pressed');
+            geocode(map);
 
-            }
-        };
+        }
+    };
 
-        // add event listener for menu
-        menu.addEventListener('click', function(e) {
+    // add event listener for menu
+    menu.addEventListener('click', function(e) {
         drawer.classList.toggle('open');
         e.stopPropagation();
-        });
+    });
 
-        document.getElementById('menu-close').addEventListener('click', function(e) {
+    document.getElementById('menu-close').addEventListener('click', function(e) {
         drawer.classList.remove('open');
         e.stopPropagation();
-        });
+    });
 
-        main.addEventListener('click', function() {
+    main.addEventListener('click', function() {
         drawer.classList.remove('open');
-      });
+    });
 
-        // ensure map resizes on window resize
-        google.maps.event.addDomListener(window, 'resize', function() {
-          map.fitBounds(bounds); //
-      });
+    // ensure map resizes on window resize
+    google.maps.event.addDomListener(window, 'resize', function() {
+        map.fitBounds(bounds); //
+    });
 };
 
 
@@ -92,7 +97,6 @@ var addmarkerfunction = function addMarkerFunction(i) {
         poplateinfowindow(this, largeInfoWindow);
         makemarkerbounce(this);
     });
-
 };
 
 
@@ -104,7 +108,9 @@ var geocode = function geocodeAddress() {
     //reset bounds of the map
     bounds = new google.maps.LatLngBounds();
 
-    geocoder.geocode({'address': address}, function(results, status) {
+    geocoder.geocode({
+        'address': address
+    }, function(results, status) {
         if (status === 'OK') {
             markers.length = 0;
             map.setCenter(results[0].geometry.location);
@@ -114,13 +120,13 @@ var geocode = function geocodeAddress() {
             //put the lat lng in an observable
             viewmodel.lat = lat;
             viewmodel.lng = lng;
-            viewmodel.getcrimes(lat, lng, 2017-06);
+            viewmodel.getcrimes(lat, lng, 2017 - 06);
             viewmodel.last5Searches();
 
-    } else {
-      window.alert('Geocode was not successful for the following reason: ' + status);
-    }
-  });
+        } else {
+            window.alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
 };
 
 
@@ -145,7 +151,10 @@ var updatemarkers = function updateCrimeMarkers() {
         var crimeLng = Number(viewmodel.crimes()[i].location().longitude);
 
         // Crime locations
-        var crimePosition = {lat: crimeLat, lng: crimeLng};
+        var crimePosition = {
+            lat: crimeLat,
+            lng: crimeLng
+        };
 
         var marker = new google.maps.Marker({
             map: map,
@@ -178,24 +187,24 @@ var updatemarkers = function updateCrimeMarkers() {
 // adds a 5 second bounce animation to markers when they are clicked
 var makemarkerbounce = function makeMarkerBounce(marker) {
     if (marker.getAnimation() !== null) {
-          marker.setAnimation(null);
-        } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function() {
-                marker.setAnimation(null);
-            }, 5000);
-        }
-    };
+        marker.setAnimation(null);
+    } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            marker.setAnimation(null);
+        }, 5000);
+    }
+};
 
 
 // show all markers in the array
 var showallmarkers = function showAllMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-            bounds.extend(markers[i].position);
-            map.fitBounds(bounds);
-            markers[i].setMap(map);
-      };
-    };
+    for (var i = 0; i < markers.length; i++) {
+        bounds.extend(markers[i].position);
+        map.fitBounds(bounds);
+        markers[i].setMap(map);
+    }
+};
 
 
 // show all markers in the array
@@ -205,13 +214,13 @@ var removeallmarkers = function removeAllMarkers() {
         map.fitBounds(bounds);
         markers[i].setMap(null);
         markers = [];
-      };
-    };
+    }
+};
 
 // this removes crime markers based on the selected dropdown
 var removecrimemarkers = function removeCrimeMarkers() {
     // need to sort out the markers and the array
-    for (var i = 0; i < markers.length; i++ ) {
+    for (var i = 0; i < markers.length; i++) {
         if (viewmodel.selectedCategory() === '') {
             console.log('I am undefined and caught');
         } else if (markers[i].title !== viewmodel.selectedCategory()) {
@@ -235,9 +244,9 @@ var poplateinfowindow = function populateInfoWindow(marker, infowindow) {
         // Make sure the marker property is cleared if the infowindow is closed.
         infowindow.addListener('closeclick', function() {
             infowindow.marker = null;
-          });
-        }
-      };
+        });
+    }
+};
 
 
 // setup ViewModel
@@ -263,14 +272,14 @@ var ViewModel = function() {
     //add last 5 locations to drop dropdown
     this.lastFive = function() {
         // check to see if a location has been searched for
-        if(self.locationName())
-        // check to see if location already exists in array
-        if(self.last5Searches().indexOf(self.locationName()) === -1)
-            this.last5Searches.push(this.locationName());
-            // maximum of 5 locaations allowed in array
-            if(self.last5Searches().length > 5)
-                self.last5Searches().shift();
-        };
+        if (self.locationName())
+            // check to see if location already exists in array
+            if (self.last5Searches().indexOf(self.locationName()) === -1)
+                this.last5Searches.push(this.locationName());
+        // maximum of 5 locaations allowed in array
+        if (self.last5Searches().length > 5)
+            self.last5Searches().shift();
+    };
 
 
     // get a list of crimes from police api
@@ -278,35 +287,35 @@ var ViewModel = function() {
         var crimeUrl = 'https://data.police.uk/api/crimes-street/all-crime?lat=' + lat + '&lng=' + lng + '&date' + date;
 
         // create new instances of crimes and add them to the crimesarray
-       $.getJSON(crimeUrl, function(allData) {
-        var mappedCrime = $.map(allData, function(item) {
-            return new Crime(item);
-        });
-        self.crimes(mappedCrime);
-    })
-    .fail(function(e) {
-        alert('Sorry there was an error selecting the data, please try again');
-    })
-    .always(function() {
-        // output to say the ajax request was a success
-        updatemarkers();
-    });
+        $.getJSON(crimeUrl, function(allData) {
+                var mappedCrime = $.map(allData, function(item) {
+                    return new Crime(item);
+                });
+                self.crimes(mappedCrime);
+            })
+            .fail(function(e) {
+                alert('Sorry there was an error selecting the data, please try again');
+            })
+            .always(function() {
+                // output to say the ajax request was a success
+                updatemarkers();
+            });
     };
 
     // Load initial data from api
     $.getJSON("https://data.police.uk/api/crimes-street/all-crime?lat=52.678419&lng=-2.445257999999967&date=2017-03", function(allData) {
-        var mappedCrime = $.map(allData, function(item) {
-            return new Crime(item);
+            var mappedCrime = $.map(allData, function(item) {
+                return new Crime(item);
+            });
+            self.crimes(mappedCrime);
+        })
+        .fail(function(e) {
+            alert('Sorry there was an error selecting the data, please try again');
+        })
+        .always(function() {
+            // output to say the ajax request was a success
+            updatemarkers();
         });
-        self.crimes(mappedCrime);
-    })
-    .fail(function(e) {
-        alert('Sorry there was an error selecting the data, please try again');
-    })
-    .always(function() {
-        // output to say the ajax request was a success
-        updatemarkers();
-    });
 
     // Update the current crime
     this.currentCrimeClick = function(clickedCrime) {
@@ -317,7 +326,7 @@ var ViewModel = function() {
     };
 
     // Just extract the categories from data
-    this.justCategories =ko.computed(function() {
+    this.justCategories = ko.computed(function() {
         var categories = ko.utils.arrayMap(self.crimes(), function(item) {
             return item.category();
         });
@@ -325,7 +334,7 @@ var ViewModel = function() {
     });
 
     // Just extract the locations from data
-    this.justLocations =ko.computed(function() {
+    this.justLocations = ko.computed(function() {
         var locations = ko.utils.arrayMap(self.crimes(), function(item) {
             return item.locations;
         });
@@ -340,37 +349,28 @@ var ViewModel = function() {
     // Captures the selected category
     this.selectedCategory = ko.observable();
 
-    // Filter category as a function
-    this.selectedFilter = function() {
 
-    };
-
-    // checks if dropdown has been selected
-    this.shouldRunFunctons = ko.observable(true);
-
-    // filter crime list based on dropdown
+    // filter crime list and markers based on dropdown
     this.filteredCrimes = ko.computed(function() {
-        if (self.shouldRunFunctons()) {
-            if (self.selectedCategory() === undefined) {
-                showallmarkers();
-                return self.crimes();
-            } else {
-                removecrimemarkers();
-                return ko.utils.arrayFilter(self.crimes(), function(crime) {
-                    return crime.category() === self.selectedCategory();
-                });
-            }
+        if (self.selectedCategory() === undefined) {
+            showallmarkers();
+            return self.crimes();
+        } else {
+            removecrimemarkers();
+            return ko.utils.arrayFilter(self.crimes(), function(crime) {
+                return crime.category() === self.selectedCategory();
+            });
         }
     });
 
 
     // Searches for location and returns markers
-   this.knockoutSearch = function() {
-       removeallmarkers();
-       geocode();
-       self.lastFive();
-       self.selectedCategory(null);
-   };
+    this.knockoutSearch = function() {
+        removeallmarkers();
+        geocode();
+        self.lastFive();
+        self.selectedCategory(null);
+    };
 };
 
 var viewmodel = new ViewModel();
