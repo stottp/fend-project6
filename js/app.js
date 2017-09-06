@@ -58,6 +58,7 @@ var init = function initMap() {
         bounds.extend(marker.position);
     }
 
+    /*
     // Capture enter key and run the geocode map function
     document.getElementById("form-container").onkeypress = function(e) {
         var key = e.charCode || e.keyCode || 0;
@@ -67,7 +68,7 @@ var init = function initMap() {
             geocode(map);
 
         }
-    };
+    }; */
 
     // add event listener for menu
     menu.addEventListener('click', function(e) {
@@ -101,8 +102,7 @@ var addmarkerfunction = function addMarkerFunction(i) {
 
 
 var geocode = function geocodeAddress() {
-    // could potentially use ko value
-    var address = document.getElementById('location').value;
+    var address = viewmodel.locationName();
     var geocoder = new google.maps.Geocoder();
 
     //reset bounds of the map
@@ -210,10 +210,12 @@ var showallmarkers = function showAllMarkers() {
 // show all markers in the array
 var removeallmarkers = function removeAllMarkers() {
     for (var i = 0; i < markers.length; i++) {
+        console.log(markers.length);
         bounds.extend(markers[i].position);
         map.fitBounds(bounds);
         markers[i].setMap(null);
         markers = [];
+        console.log(markers.length);
     }
 };
 
@@ -367,7 +369,6 @@ var ViewModel = function() {
     // Searches for location and returns markers
     this.knockoutSearch = function() {
         removeallmarkers();
-        geocode();
         self.lastFive();
         self.selectedCategory(null);
     };
